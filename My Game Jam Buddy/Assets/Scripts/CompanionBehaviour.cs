@@ -4,13 +4,14 @@ public class CompanionBehaviour : MonoBehaviour
 {
     public string companionName;
     public bool isUnlocked;
+    [SerializeField] GameObject visual;
 
     [SerializeField] private Animator animator;
 
     public void Unlock()
     {
         isUnlocked = true;
-        gameObject.SetActive(true);
+        visual.SetActive(true);
         PlayIdleAnimation();
     }
 

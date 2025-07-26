@@ -1,13 +1,18 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CompanionManager : MonoBehaviour
 {
     [SerializeField] private List<CompanionBehaviour> companions;
 
+    [Header("Companion UI")]
+    [SerializeField] TextMeshProUGUI companionNameText;
+
     private void Start()
     {
         SetIdle();
+        companionNameText.text = "locked";
     }
 
     public void SetIdle()
@@ -22,10 +27,12 @@ public class CompanionManager : MonoBehaviour
     public void UnlockByLevel(int level)
     {
         if (level == 2)
+        {
             Debug.Log("Unlocking Companion 1");
+            companionNameText.text = "Unlocked";
             companions[1].Unlock();
-        if (level == 4)
-            companions[2].Unlock();
+        }
+        
     }
 
     public void StartAllWorking()
@@ -35,5 +42,11 @@ public class CompanionManager : MonoBehaviour
             if (c.isUnlocked)
                 c.PlayWorkingAnimation();
         }
+    }
+
+    
+    public void ChangeTextUnlock()
+    {
+
     }
 }
