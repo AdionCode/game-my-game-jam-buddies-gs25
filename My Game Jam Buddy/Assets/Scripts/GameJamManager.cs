@@ -10,6 +10,10 @@ public class GameJamManager : MonoBehaviour
     [SerializeField] private List<GameJamData> gameJams;
     private int selectedIndex = 0;
 
+    [SerializeField] StudioProgress studio;
+
+    [SerializeField] CompanionManager companion;
+
     private void Start()
     {
         IdleTimer.onTimerFinished.AddListener(OnTimerEnded);
@@ -37,21 +41,41 @@ public class GameJamManager : MonoBehaviour
         DisplaySelectedGameJam();
     }
 
-    private void ChangeGameJam()
-    {
-        gameJamText.text = "Game Jam Changed!";
-    }
-
     public void ChooseGameJam()
     {
         var selectedJam = gameJams[selectedIndex];
         IdleTimer.StartCountdown(selectedJam.durationInSeconds);
+        companion.StartAllWorking();
         Debug.Log("Memulai Game Jam: " + selectedJam.jamName);
     }
 
     private void OnTimerEnded()
     {
         Debug.Log("GameJamManager tahu: Timer selesai!");
-        // Tambahkan aksi di sini: tampilkan UI selesai, companion dapat exp, dll
+        OnGameJamFinished();
+    }
+
+    void OnGameJamFinished()
+    {
+        companion.SetIdle();
+        var selectedJam = gameJams[selectedIndex];
+        int expEarned = Random.Range(selectedJam.minExp, selectedJam.maxExp + 1);
+        studio.AddXP(expEarned);
+
+        if (TryWinGameJam(studio.currentLevel))
+        {
+            int moneyEarned = selectedJam.Money;
+            studio.AddMoney(moneyEarned);
+            Debug.Log("Menang Game Jam! Dapat uang: " + moneyEarned);
+        }
+        else
+        {
+            Debug.Log("Tidak menang Game Jam. Tapi dapat EXP.");
+        }
+    }
+    bool TryWinGameJam(int studioLevel)
+    {
+        float winChance = Mathf.Clamp01(0.2f + (studioLevel * 0.05f));
+        return Random.value < winChance;
     }
 }
