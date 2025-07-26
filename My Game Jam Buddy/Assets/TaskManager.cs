@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class TaskManager : MonoBehaviour
 {
+    [SerializeField] StudioProgress studio;
+
     [Header("Bug Hunter Task")]
     public GameObject bugHunterPanel;
     public List<GameObject> bugButtons;
@@ -72,7 +74,10 @@ public class TaskManager : MonoBehaviour
         bugsFixed++;
 
         if (bugsFixed >= bugToActivate)
+        {
+            studio.AddXP(25);
             gameDone = true;
+        }
     }
     #endregion
 

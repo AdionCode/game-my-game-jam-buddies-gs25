@@ -1,13 +1,23 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StudioProgress : MonoBehaviour
 {
     [SerializeField] CompanionManager companion;
 
+    [SerializeField] private Slider xpSlider;
+    [SerializeField] private TextMeshProUGUI levelText;
+
     public int currentLevel;
     public int currentXP;
     public int xpToNextLevel;
     public int money;
+
+    private void Start()
+    {
+        UpdateUI();
+    }
 
     public void AddXP(int amount)
     {
@@ -16,6 +26,8 @@ public class StudioProgress : MonoBehaviour
         {
             LevelUp();
         }
+
+        UpdateUI();
     }
 
     public void AddMoney(int amount)
@@ -31,5 +43,19 @@ public class StudioProgress : MonoBehaviour
         xpToNextLevel += 100; 
 
         companion.UnlockByLevel(currentLevel);
+    }
+
+    private void UpdateUI()
+    {
+        if (xpSlider != null)
+        {
+            xpSlider.maxValue = xpToNextLevel;
+            xpSlider.value = currentXP;
+        }
+
+        if (levelText != null)
+        {
+            levelText.text = "Studio Level " + currentLevel;
+        }
     }
 }
