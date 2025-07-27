@@ -11,6 +11,7 @@ public class TaskManager : MonoBehaviour
 
     [Header("Bug Hunter Task")]
     public List<GameObject> bugButtons;
+    [SerializeField] GameObject bugHunterObject;
     public int bugToActivate = 3;
     private int bugsFixed = 0;
 
@@ -19,16 +20,47 @@ public class TaskManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI verifyText;
     int left2press = 10;
 
+    [Header("Don't Click the Button Task")]
+    [SerializeField] GameObject dontClickButtonObject;
+    [SerializeField] TextMeshProUGUI dontClickButtonText;
+
+    [Header("Stay Hydrated Task")]
+    [SerializeField] GameObject stayHydratedObject;
+
     private void Start()
     {
-        StartCoroutine(AreYouARobot());
+
     }
 
     public void StartTask()
     {
-        StartCoroutine(BugHunter());
-        StartCoroutine(AreYouARobot());
+        minigamePanel.SetActive(true);
+        gameDone = false;
+
+        int pick = Random.Range(0, 4);
+        switch (pick)
+        {
+            case 0:
+                StartCoroutine(BugHunter());
+                break;
+            case 1:
+                StartCoroutine(AreYouARobot());
+                break;
+            case 2:
+                StartCoroutine(DontClickTheButton());
+                break;
+            case 3:
+                StartCoroutine(StayHydrated());
+                break;
+        }
     }
+
+    public void EndTask()
+    {
+        minigamePanel.SetActive(false);
+        gameDone = true;
+    }
+
     public bool IsTaskDone()
     {
         return gameDone;
@@ -37,7 +69,7 @@ public class TaskManager : MonoBehaviour
     #region Bug Hunter
     IEnumerator BugHunter()
     {
-        minigamePanel.SetActive(true);
+        bugHunterObject.SetActive(true);
         bugsFixed = 0;
         gameDone = false;
 
@@ -70,8 +102,8 @@ public class TaskManager : MonoBehaviour
         // Cleanup
         foreach (var b in bugButtons)
             b.SetActive(false);
-        minigamePanel.SetActive(false);
-        gameDone = true;
+        bugHunterObject.SetActive(false);
+        EndTask();
     }
 
     public void OnBugClicked(GameObject bug)
@@ -82,7 +114,7 @@ public class TaskManager : MonoBehaviour
         if (bugsFixed >= bugToActivate)
         {
             studio.AddXP(25);
-            gameDone = true;
+            EndTask();
         }
     }
     #endregion
@@ -92,7 +124,6 @@ public class TaskManager : MonoBehaviour
     IEnumerator AreYouARobot()
     {
         gameDone = false;
-        minigamePanel.SetActive(true);
         capcthaObject.SetActive(true);
 
         left2press = Random.Range(10, 30);
@@ -107,8 +138,8 @@ public class TaskManager : MonoBehaviour
         }
 
         capcthaObject.SetActive(false);
-        minigamePanel.SetActive(false);
-        gameDone = true;
+        verifyText.text = "";
+        EndTask();
     }
 
     public void VerifyButton()
@@ -119,8 +150,77 @@ public class TaskManager : MonoBehaviour
         if (left2press == 0)
         {
             studio.AddXP(25);
+            verifyText.text = "";
             gameDone = true;
         }
+    }
+
+    #endregion
+
+    #region Don't Click the Button
+
+    IEnumerator DontClickTheButton()
+    {
+        dontClickButtonObject.SetActive(true);
+
+        float timeout = 10f;
+        float timer = 0f;
+
+        while (!gameDone && timer < timeout)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        dontClickButtonObject.SetActive(false);
+        studio.AddXP(25);
+        EndTask();
+    }
+
+    public void DontClickButton()
+    {
+        string[] reactionTexts = {
+        "Bruh ._.",
+        "You had one job...",
+        "Bruh, really?",
+        "NASA called. They said stop.",
+        "You clicked it. Happy now?",
+        "Error 404: self-control not found.",
+        "Great, now we all die.",
+        "This is why we can’t have nice things.",
+        "I warned you, didn’t I?",
+        "That's it, I'm telling mom."
+    };
+
+        int index = Random.Range(0, reactionTexts.Length);
+        dontClickButtonText.text = reactionTexts[index];
+    }
+
+    #endregion
+
+    #region Stay Hydrated
+
+    IEnumerator StayHydrated()
+    {
+        stayHydratedObject.SetActive(true);
+
+        float timeout = 10f;
+        float timer = 0f;
+
+        while (!gameDone && timer < timeout)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        stayHydratedObject.SetActive(false);
+        EndTask();
+    }
+
+    public void StayHydratedButton()
+    {
+        studio.AddXP(25);
+        EndTask();
     }
 
     #endregion
