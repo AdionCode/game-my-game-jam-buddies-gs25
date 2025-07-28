@@ -8,6 +8,7 @@ public class StudioProgress : MonoBehaviour
 
     [SerializeField] private Slider xpSlider;
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI levelDetailText;
 
     public int currentLevel;
     public int currentXP;
@@ -56,6 +57,11 @@ public class StudioProgress : MonoBehaviour
         if (levelText != null)
         {
             levelText.text = "Studio Level " + currentLevel;
+        }
+
+        if (levelDetailText != null)
+        {
+            levelDetailText.text = $"[{(currentXP / (float)xpToNextLevel) * 100f:0.00}%] {currentXP}/{xpToNextLevel}";
         }
     }
 }
