@@ -49,7 +49,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //Debug.Log("pointer down");
+        rectTransform.SetAsLastSibling();
     }
 
     private void ClampPosition()
