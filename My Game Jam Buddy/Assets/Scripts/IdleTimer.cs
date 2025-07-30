@@ -31,6 +31,7 @@ public class IdleTimer : MonoBehaviour
             timeRemaining = 0;
             timerRunning = false;
             onTimerFinished.Invoke();
+            timerText.text = "Select";
             Debug.Log("Timer selesai");
         }
     }

@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 public class GameJamManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI gameJamText;
+    [SerializeField] private TextMeshProUGUI gameJamLogHistory;
 
     [SerializeField] private List<GameJamData> gameJams;
     private int selectedIndex = 0;
@@ -27,8 +29,15 @@ public class GameJamManager : MonoBehaviour
     private void DisplaySelectedGameJam()
     {
         var selectedJam = gameJams[selectedIndex];
+        float baseChance = Mathf.Clamp01(0.2f + (studio.currentLevel * 0.1f));
+        float winChance = baseChance * (1f - selectedJam.difficulty);
         Debug.Log("Dipilih: " + selectedJam.jamName + " (" + selectedJam.durationInSeconds + " detik)");
-        gameJamText.text = $"{selectedJam.jamName}";
+        gameJamText.text =
+            $"[ {selectedJam.jamName} ]\n" +
+            $"> Duration -> {selectedJam.durationInSeconds} sec\n" +
+            $"> EXP Gain -> +{selectedJam.Exp}\n" +
+            $"> Win Reward -> {selectedJam.Money} Coins" +
+            $"> Chance : [{winChance * 100f:0}%]";
     }
 
     public void LeftSelect()
@@ -59,6 +68,7 @@ public class GameJamManager : MonoBehaviour
     {
         isWorking = false;
         StopAllCoroutines();
+        DisplaySelectedGameJam();
         Debug.Log("GameJamManager tahu: Timer selesai!");
         OnGameJamFinished();
     }
@@ -67,23 +77,26 @@ public class GameJamManager : MonoBehaviour
     {
         companion.SetIdle();
         var selectedJam = gameJams[selectedIndex];
-        int expEarned = Random.Range(selectedJam.minExp, selectedJam.maxExp + 1);
-        studio.AddXP(expEarned);
+        studio.AddXP(selectedJam.Exp);
+        int moneyEarned = selectedJam.Money;
 
         if (TryWinGameJam(studio.currentLevel))
         {
-            int moneyEarned = selectedJam.Money;
             studio.AddMoney(moneyEarned);
+            gameJamLogHistory.text = $"[ {selectedJam.jamName} ]  \r\n> Result -> Win! \r\n> Coin -> (+{moneyEarned})\r\n> Exp -> (+{selectedJam.Exp})";
             Debug.Log("Menang Game Jam! Dapat uang: " + moneyEarned);
         }
         else
         {
+            gameJamLogHistory.text = $"[ {selectedJam.jamName} ]  \r\n> Result -> Lose! \r\n> Coin -> (+0)\r\n> Exp -> (+{selectedJam.Exp})";
             Debug.Log("Tidak menang Game Jam. Tapi dapat EXP.");
         }
     }
     bool TryWinGameJam(int studioLevel)
     {
-        float winChance = Mathf.Clamp01(0.2f + (studioLevel * 0.05f));
+        var selectedJam = gameJams[selectedIndex];
+        float baseChance = Mathf.Clamp01(0.2f + (studioLevel * 0.1f));
+        float winChance = baseChance * (1f - selectedJam.difficulty);
         return Random.value < winChance;
     }
 

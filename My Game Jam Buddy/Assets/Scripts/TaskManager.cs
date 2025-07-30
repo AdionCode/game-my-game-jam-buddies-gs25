@@ -7,6 +7,7 @@ public class TaskManager : MonoBehaviour
 {
     [SerializeField] StudioProgress studio;
     public GameObject minigamePanel;
+    [SerializeField] TextMeshProUGUI minitaskTitle;
     private bool gameDone = false;
 
     [Header("Bug Hunter Task")]
@@ -29,7 +30,7 @@ public class TaskManager : MonoBehaviour
 
     private void Start()
     {
-
+        StartCoroutine(BugHunter());
     }
 
     public void StartTask()
@@ -41,15 +42,19 @@ public class TaskManager : MonoBehaviour
         switch (pick)
         {
             case 0:
+                minitaskTitle.text = "Bug Hunter";
                 StartCoroutine(BugHunter());
                 break;
             case 1:
+                minitaskTitle.text = "Are You a Robot?";
                 StartCoroutine(AreYouARobot());
                 break;
             case 2:
+                minitaskTitle.text = "Don't Click the Button!";
                 StartCoroutine(DontClickTheButton());
                 break;
             case 3:
+                minitaskTitle.text = "Stay Hydrated!";
                 StartCoroutine(StayHydrated());
                 break;
         }
@@ -162,6 +167,7 @@ public class TaskManager : MonoBehaviour
     IEnumerator DontClickTheButton()
     {
         dontClickButtonObject.SetActive(true);
+        dontClickButtonText.text = "Don't click the button!";
 
         float timeout = 10f;
         float timer = 0f;
@@ -190,7 +196,7 @@ public class TaskManager : MonoBehaviour
         "This is why we can’t have nice things.",
         "I warned you, didn’t I?",
         "That's it, I'm telling mom."
-    };
+        };
 
         int index = Random.Range(0, reactionTexts.Length);
         dontClickButtonText.text = reactionTexts[index];

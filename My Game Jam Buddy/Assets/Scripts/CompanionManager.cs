@@ -6,13 +6,9 @@ public class CompanionManager : MonoBehaviour
 {
     [SerializeField] private List<CompanionBehaviour> companions;
 
-    [Header("Companion UI")]
-    [SerializeField] TextMeshProUGUI companionNameText;
-
     private void Start()
     {
         SetIdle();
-        companionNameText.text = "locked";
     }
 
     public void SetIdle()
@@ -26,12 +22,11 @@ public class CompanionManager : MonoBehaviour
 
     public void UnlockByLevel(int level)
     {
-        if (level == 2)
-        {
-            Debug.Log("Unlocking Companion 1");
-            companionNameText.text = "Unlocked";
-            companions[1].Unlock();
-        }
+        //if (level == 2)
+        //{
+        //    Debug.Log("Unlocking Companion 1");
+        //    companions[1].Unlock();
+        //}
         
     }
 
