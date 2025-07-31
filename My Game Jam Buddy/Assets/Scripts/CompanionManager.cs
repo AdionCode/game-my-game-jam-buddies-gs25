@@ -22,12 +22,12 @@ public class CompanionManager : MonoBehaviour
 
     public void UnlockByLevel(int level)
     {
-        //if (level == 2)
-        //{
-        //    Debug.Log("Unlocking Companion 1");
-        //    companions[1].Unlock();
-        //}
-        
+        if (level == 2)
+        {
+            Debug.Log("Unlocking Companion 1");
+            companions[1].Unlock();
+        }
+
     }
 
     public void StartAllWorking()
@@ -39,7 +39,7 @@ public class CompanionManager : MonoBehaviour
         }
     }
 
-    
+
     public void ChangeTextUnlock()
     {
 

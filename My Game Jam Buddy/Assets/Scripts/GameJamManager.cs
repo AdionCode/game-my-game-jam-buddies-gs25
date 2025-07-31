@@ -31,12 +31,15 @@ public class GameJamManager : MonoBehaviour
         var selectedJam = gameJams[selectedIndex];
         float baseChance = Mathf.Clamp01(0.2f + (studio.currentLevel * 0.1f));
         float winChance = baseChance * (1f - selectedJam.difficulty);
+
+        int minutes = Mathf.RoundToInt(selectedJam.durationInSeconds / 60f);
+
         Debug.Log("Dipilih: " + selectedJam.jamName + " (" + selectedJam.durationInSeconds + " detik)");
         gameJamText.text =
             $"[ {selectedJam.jamName} ]\n" +
-            $"> Duration -> {selectedJam.durationInSeconds} sec\n" +
+            $"> Duration -> {minutes} min\n" +
             $"> EXP Gain -> +{selectedJam.Exp}\n" +
-            $"> Win Reward -> {selectedJam.Money} Coins" +
+            $"> Win Reward -> +{selectedJam.Money} c\n" +
             $"> Chance : [{winChance * 100f:0}%]";
     }
 

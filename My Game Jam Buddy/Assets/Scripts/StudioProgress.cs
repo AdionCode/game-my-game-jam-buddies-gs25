@@ -9,6 +9,7 @@ public class StudioProgress : MonoBehaviour
     [SerializeField] private Slider xpSlider;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI levelDetailText;
+    [SerializeField] private TextMeshProUGUI moneyText;
 
     public int currentLevel;
     public int currentXP;
@@ -34,7 +35,7 @@ public class StudioProgress : MonoBehaviour
     public void AddMoney(int amount)
     {
         money += amount;
-        // Update UI atau apapun
+        UpdateUI();
     }
 
     private void LevelUp()
@@ -44,6 +45,22 @@ public class StudioProgress : MonoBehaviour
         xpToNextLevel += 100; 
 
         companion.UnlockByLevel(currentLevel);
+    }
+
+    public bool SpendMoney(int amount)
+    {
+        if (money >= amount)
+        {
+            money -= amount;
+            UpdateUI();
+            return true;
+        }
+        else
+        {
+            AudioManager.Instance.PlaySFX("Error");
+            Debug.Log("Not enough money");
+            return false;
+        }
     }
 
     private void UpdateUI()
@@ -62,6 +79,11 @@ public class StudioProgress : MonoBehaviour
         if (levelDetailText != null)
         {
             levelDetailText.text = $"[{(currentXP / (float)xpToNextLevel) * 100f:0.00}%] {currentXP}/{xpToNextLevel}";
+        }
+
+        if (moneyText != null)
+        {
+            moneyText.text = "Coins : " + money;
         }
     }
 }

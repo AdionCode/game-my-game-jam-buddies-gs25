@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
     {
         if (window != null)
             window.SetActive(!window.activeSelf);
+        AudioManager.Instance.PlaySFX("Select");
     }
 
     public void ShowWindow(GameObject window)

@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class IdleTimer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI timerText2;
 
     private float timeRemaining;
     private bool timerRunning = false;
@@ -32,6 +33,7 @@ public class IdleTimer : MonoBehaviour
             timerRunning = false;
             onTimerFinished.Invoke();
             timerText.text = "Select";
+            timerText2.text = "Not in Game Jam";
             Debug.Log("Timer selesai");
         }
     }
@@ -41,5 +43,6 @@ public class IdleTimer : MonoBehaviour
         int minutes = Mathf.FloorToInt(timeRemaining / 60);
         int seconds = Mathf.FloorToInt(timeRemaining % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerText2.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

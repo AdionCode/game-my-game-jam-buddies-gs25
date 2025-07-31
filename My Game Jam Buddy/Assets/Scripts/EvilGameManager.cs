@@ -8,6 +8,15 @@ public class EvilGameManager : MonoBehaviour
     [SerializeField] Transform bossSpawnPoint;
     public Collider2D mouseCollider;
 
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Berhenti play mode jika di Editor
+#else
+                Application.Quit(); // Keluar dari aplikasi jika sudah di-build
+#endif
+    }
+
     public void StartBossBattle()
     {
         StartCoroutine(StartBossBattleSequence());

@@ -115,10 +115,12 @@ public class TaskManager : MonoBehaviour
     {
         bug.SetActive(false);
         bugsFixed++;
+        AudioManager.Instance.PlaySFX("Error");
 
         if (bugsFixed >= bugToActivate)
         {
             studio.AddXP(25);
+            studio.AddMoney(5);
             EndTask();
         }
     }
@@ -151,10 +153,11 @@ public class TaskManager : MonoBehaviour
     {
         verifyText.text = $"Yeah sure buddy.\r\nyou need to press {left2press} again.";
         left2press--;
-
+        AudioManager.Instance.PlaySFX("Select");
         if (left2press == 0)
         {
             studio.AddXP(25);
+            studio.AddMoney(5);
             verifyText.text = "";
             gameDone = true;
         }
@@ -180,6 +183,7 @@ public class TaskManager : MonoBehaviour
 
         dontClickButtonObject.SetActive(false);
         studio.AddXP(25);
+        studio.AddMoney(5);
         EndTask();
     }
 
@@ -199,6 +203,7 @@ public class TaskManager : MonoBehaviour
         };
 
         int index = Random.Range(0, reactionTexts.Length);
+        AudioManager.Instance.PlaySFX("Error");
         dontClickButtonText.text = reactionTexts[index];
     }
 
@@ -226,6 +231,8 @@ public class TaskManager : MonoBehaviour
     public void StayHydratedButton()
     {
         studio.AddXP(25);
+        studio.AddMoney(5);
+        AudioManager.Instance.PlaySFX("Select");
         EndTask();
     }
 
